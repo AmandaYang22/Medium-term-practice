@@ -1,0 +1,2 @@
+# Medium-term-practice
+As a gas concentration display system in the air, the core of the system is that all users can query the data received at any time, any area, any node, and can intuitively observe the trend of each gas at different times and provide data download. This system is divided into three parts: 1. Listener: Run in the background, listen to the specified port of the server to get and refresh the data. 2. Decoding procedure: Decode the accepted data set into corresponding data. 3. Front part: Dynamic display of various data trend changes
