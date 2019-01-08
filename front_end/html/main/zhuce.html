@@ -1,0 +1,208 @@
+<!DOCTYPE html  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html" ; charset="gb2312">
+<title>注册</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <!--Bootstrap-->
+  <link href="bootstrap.css" rel="stylesheet" media="screen">
+  <link href="css/bootstrap-responsive.css" rel="stylesheet">
+</head>
+
+<script type="text/javascript">
+function checkusername(userName){
+  var str=userName;
+  var Expression=/^(\w){3,10}$/;
+  var objExp=new RegExp(Expression);
+  if(objExp.test(str)==true){
+    return true;
+  }else{
+    return false;
+  }
+}
+function checkPWD(userPassword){
+  var str=userPassword;
+  var Expression=/^\w+$/;
+  var objExp=new RegExp(Expression);
+  if(objExp.test(str)!=true){
+    alert("输入密码不合法!");return false;
+  }
+}
+function checkemail(userEmail){
+  var str = userEmail;
+  var Expression=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+  var objExp=new RegExp(Expression);
+  if(objExp.test(str)!=true){
+    alert("输入邮箱地址不合法!");
+  }
+}
+function check(logon){
+  if(logon.userName.value==""){
+    alert("请输入用户名!");logon.userName.focus();
+    return false;
+  }
+  if(!checkusername(logon.userName.value)){
+    alert("输入用户名不合法");logon.userName.focus();
+    return false;
+  }
+  if(logon.userPassword.value==""){
+    alert("输入密码!");logon.userPassword.focus();
+    return false;
+  }
+  if(logon.userRePassword.value==""){
+    alert("请输入确认密码!");logon.userRePassword.focus();
+    return false;
+  }
+  if (logon.userRePassword.value!=logon.userPassword.value) {
+    alert("密码不一致，请重新输入!");logon.userRePassword.focus();
+    return false;
+  }
+  if(logon.userEmail.value==""){
+    alert("请输入邮箱!");logon.userEmail.focus();
+    return false;
+  }
+  checkusername(logon.userName.value);
+  checkPWD(logon.userPassword.value);
+  checkemail(logon.userEmail.value);
+  logon.submit();
+}
+
+function ajaxFunction(){ 
+  var xmlHttp;
+  try
+  {
+    xmlHttp=new XMLHttpRequest();
+  }
+  catch (e)
+  {
+    try
+    {
+      xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+    }
+    catch (e)
+    {
+      try
+      {
+        xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      catch (e)
+      {
+        alert("您的浏览器不支持AJAX！");
+        return false;
+      }
+    }
+  }
+  xmlHttp.onreadystatechange=function()
+  {
+    if(xmlHttp.readyState==4)
+    {
+      document.logon.exsit.value=xmlHttp.responseText;
+    }
+  }
+  var name=document.logon.userName.value;
+  xmlHttp.open("get","test.php?name="+name,true);
+  xmlHttp.send(null);
+}
+
+</script>
+
+<body windowc_onresizez="true" background="2.jpg">
+<script type="js/jquery.js"></script>
+<script type="js/bootstrap.js"></script>
+<div class="row-fluid">
+<div class="span12"></div>
+<div class="span12"></div>
+<div class="span12">
+<div class="span6"></div>
+<div class="span6">
+  
+    <form action="connect1.php" name="logon" class="form-horizontal" method="post" 360chrome_form_autofill="2">
+
+    
+    <h1 class="form-horizontal-heading"></h1>
+
+
+    <div class="control-group">
+    <label class="control-label" for="userName">用户名</label>
+      <div class="controls">
+      <div class="input-prepend">
+        <span class="add-on"><i class="icon-user"></i></span>
+          <input  required="required" class="span10" type="text" name="userName" id="userName" placeholder="请输入用户名" onblur="ajaxFunction(name)"><label id="exsit" generated="true" class="exsit"></label>
+      </div>
+      <input  style="border-style:none" type="text" name="exsit" />
+      </div>
+    </div>
+    
+
+    
+    <div class="control-group">
+    <label class="control-label" for="userPassword">密码</label>
+      <div class="controls">
+      <div class="input-prepend">
+        <span class="add-on"><i class="icon-user"></i></span>
+          <input  required="required" class="span10" type="password" name="userPassword" id="userPassword" placeholder="请输入密码">
+          
+      </div>
+      </div>
+    </div>
+
+   
+    <div class="control-group">
+    <label class="control-label" for="userRePassword">确认密码</label>
+      <div class="controls">
+      <div class="input-prepend">
+        <span class="add-on"><i class="icon-user"></i></span>
+          <input  required="required" class="span10" type="password" name="userRePassword" id="userRePassword" placeholder="请再次输入密码">
+          
+      </div>
+      </div>
+    </div>
+
+    
+    <div class="control-group">
+    <label class="control-label" for="userEmail">邮箱</label>
+      <div class="controls">
+      <div class="input-prepend">
+        <span class="add-on"><i class="icon-user"></i></span>
+          <input  required="required" class="span10" type="email" name="userEmail" id="userEmail" placeholder="请输入邮箱">
+      </div>
+      </div>
+    </div>
+
+    
+    <div class="control-group">
+    <label class="control-label" for="userSelect">身份</label>
+      <div class="controls">
+        <select>
+          <option name="student">学生</option>
+          <option name="teacher">教师</option>
+          <option name="admin">管理员</option>
+        </select>
+      </div>
+    </div>
+
+    
+    <div class="control-group">
+    <label class="control-label">申请理由</label>
+      <div class="controls">
+        <textarea class="form-control" id="userReason" name="userReason" rows="5"></textarea>
+      </div>
+    </div>
+
+
+    <div class="control-group">
+      <div class="controls">
+          <button onclick="return check(logon);" type="submit"  class="btn">注册</button>
+
+          <button type="reset" class="btn">重置</button>
+          <a href="main.html" class="btn" >首页</a>
+      </div>
+    </div>
+
+</form>
+
+</div>
+</div>
+</div>
+</body>
+</html>

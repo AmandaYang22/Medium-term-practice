@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whirling dropdown menu | Script Tutorials</title>
+    <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link type="text/css" href="css/theme.css" rel="stylesheet">
+    <link type="text/css" href="css/font-awesome.css" rel="stylesheet">
+    <link type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600' rel='stylesheet'>
+    <link type="text/css" href="css/css/weather.css" rel="stylesheet">
+    
+
+
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/chart.min.js"></script>
+
+    <script type="text/javascript">
+    var chart=null;
+    var chart_b=null;
+    function play(){
+
+        tab=document.all.tableHint;
+        row=tab.rows.length;
+        //column=tab.rows[0].cells.length;
+        col=50;
+        var data1=new Array();//for data1
+        var colo=new Array();
+        /*var data2=new Array();//for data2
+        var data3=new Array();//for data3
+        var data4=new Array();//for data4
+        var data5=new Array();//for data5
+        var data6=new Array();//for data6
+        var data7=new Array();//for data7
+        var data8=new Array();//for data8*/
+        //var temperature=new Array();//for temperature data
+        var time=new Array();//for datetime
+        var count=0;
+        //area1=tab.rows[10].cells[2].innerHTML;
+        //area2=tab.rows[11].cells[2].innerHTML;
+        type=tab.rows[1].cells[0].innerHTML;
+        type1=tab.rows[2].cells[0].innerHTML;
+        for(i=1;i<row;i++){
+            data1[count]=tab.rows[i].cells[4].innerHTML;
+            time[count]=tab.rows[i].cells[1].innerHTML;
+            colo[count]='rgb('+255+','+(col+10)+','+50+')';
+            col=col+10;
+            count++;
+        }
+        if(type==type1)
+            chartlabel=type1;
+        else chartlabel='mixed_data';
+        if (chart!=null) {
+            chart.destroy();
+        }
+        /*if(area1==area2)
+            chartlabel=type1;
+        else chartlabel='mixed_data';*/
+        var ctx = document.getElementById('myChart').getContext('2d');
+        chart = new Chart(ctx, {
+        // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: time,
+                datasets: [{
+                    label: chartlabel,
+                    backgroundColor: 'rgb(255, 255, 255)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    pointBackgroundColor:'rgb(255, 99, 100)',
+                    data: data1,
+                }],
+            },
+
+            // Configuration options go here
+            options: {
+                elements: {
+                    line: {
+                        tension: 0, // disables bezier curves
+                    }
+                    },
+                
+            }
+        });
+
+
+
+        if (chart_b!=null) {
+            chart_b.destroy();
+        }
+        var ctx_b = document.getElementById('myChart1').getContext('2d');
+        chart_b= new Chart(ctx_b, {
+            // The type of chart we want to create
+            type: 'bar',
+
+            // The data for our dataset
+            data: {
+                labels: time,
+                datasets: [{
+                    label: chartlabel,
+                    backgroundColor: colo,
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: data1,
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+            
+
+    } 
+    </script>
+
+
+
+
+
+    <script type="text/javascript">
+    function defaultData(){
+    var value1="2017-01";
+    var value2="2017-12";
+    var value3="all";
+    var value4="all";
+    var value5="all";
+    xmlHttp=GetXmlHttpObject()
+    if (xmlHttp==null)
+     {
+     alert ("Browser does not support HTTP Request")
+     return
+     }
+    var url="display.php"
+    url=url+"?time_start="+value1+"&time_end="+value2+"&type="+value3+"&area="+value4+"&node="+value5;
+    /*alert("url");
+    alert(url);*/
+    url=url+"&sid="+Math.random()
+    xmlHttp.onreadystatechange=stateChanged 
+    xmlHttp.open("GET",url,true)
+    xmlHttp.send(null)
+    }
+
+
+
+
+
+    function showData1()
+    { //alert("in")
+    var begin=document.getElementById("time_start");
+    var index1=begin.selectedIndex;
+    var value1=begin.options[index1].value;
+   // alert("time_begin");
+  //  alert(value1);
+    var finish=document.getElementById("time_end");
+    var index2=finish.selectedIndex;
+    var value2=finish.options[index2].value;
+    //alert("time_end");
+   // alert(value2);
+
+    var t=document.getElementById("type");
+    var index3=t.selectedIndex;
+    var value3=t.options[index3].value;
+    /*alert("type");
+    alert(value3);*/
+
+    //var z=document.getElementById("area");
+    //var index4=z.selectedIndex;
+   // var value4=z.options[index4].value;
+    var value4=arguments[0];
+    
+    //var n=document.getElementById("node");
+    //var index5=n.selectedIndex;
+    //var value5=n.options[index5].value;
+    var value5=arguments[1];
+
+
+    if(value1!=""&&value2!=""){
+        if(value1>value2){
+          alert("The end time cannot be early than the begin time");
+          return false;
+        }
+    }
+
+    xmlHttp=GetXmlHttpObject()
+    if (xmlHttp==null)
+     {
+     alert ("Browser does not support HTTP Request")
+     return
+     }
+    var url="display.php"
+    url=url+"?time_start="+value1+"&time_end="+value2+"&type="+value3+"&area="+value4+"&node="+value5;
+    /*alert("url");
+    alert(url);*/
+    url=url+"&sid="+Math.random()
+    xmlHttp.onreadystatechange=stateChanged 
+    xmlHttp.open("GET",url,true)
+    xmlHttp.send(null)
+    }
+
+    
+
+    function stateChanged() 
+    { 
+    if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
+     { 
+         document.getElementById("tableHint").innerHTML=xmlHttp.responseText;
+         play();
+     } 
+    }
+
+    function GetXmlHttpObject()
+    {
+    var xmlHttp=null;
+    try
+     {
+     // Firefox, Opera 8.0+, Safari
+     xmlHttp=new XMLHttpRequest();
+     }
+    catch (e)
+     {
+     //Internet Explorer
+     try
+      {
+      xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+      }
+     catch (e)
+      {
+      xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+     }
+    return xmlHttp;
+    }
+
+
+    </script>
+
+
+    
+
+
+
+
+<script language="javascript">
+var idTmr;  
+function getExplorer() {  
+    /*var explorer = window.navigator.userAgent;  
+    if (explorer.indexOf("MSIE") >= 0 || (explorer.indexOf("Windows NT 6.1;") >= 0 && explorer.indexOf("Trident/7.0;") >= 0)) {  
+        return 'ie';   //ie    
+    }  
+    else if (explorer.indexOf("Firefox") >= 0) {  
+        return 'Firefox';  //firefox    
+    }  
+    else if (explorer.indexOf("Chrome") >= 0) {  
+        return 'Chrome'; //Chrome    
+    }  
+    else if (explorer.indexOf("Opera") >= 0) {  
+        return 'Opera';  //Opera    
+    }  
+    else if (explorer.indexOf("Safari") >= 0) {  
+        return 'Safari';   //Safari    
+    }  */
+    var explorer = window.navigator.userAgent;  
+    
+   if (explorer.indexOf("Firefox") >= 0) {  
+        return 'Firefox';  //firefox    
+    }  
+    else if (explorer.indexOf("Chrome") >= 0) {  
+        return 'Chrome'; //Chrome    
+    }  
+    else if (explorer.indexOf("Opera") >= 0) {  
+        return 'Opera';  //Opera    
+    }  
+    else if (explorer.indexOf("Safari") >= 0) {  
+        return 'Safari';   //Safari    
+    }  
+    else{
+    return 'ie';
+    }
+}  
+  
+//´Ë·½·¨Îªieµ¼³öÖ®ºó,¿ÉÒÔ±£Áôtable¸ñÊ½µÄ·½·¨  
+function getIEsink(tableid) {  
+    var curTbl = document.getElementById(tableid);  
+    if (curTbl == null || curTbl == "") {  
+        alert("Ã»ÓÐÊý¾Ý");  
+        return false;  
+    }  
+    var oXL;  
+    try {  
+        oXL = new ActiveXObject("Excel.Application"); //´´½¨AX¶ÔÏóexcel    
+    } catch (e) {  
+        alert("ÎÞ·¨Æô¶¯Excel!\n\nÈç¹ûÄúÈ·ÐÅÄúµÄµçÄÔÖÐÒÑ¾­°²×°ÁËExcel£¬" + "ÄÇÃ´Çëµ÷ÕûIEµÄ°²È«¼¶±ð¡£\n\n¾ßÌå²Ù×÷£º\n\n" + "¹¤¾ß ¡ú InternetÑ¡Ïî ¡ú °²È« ¡ú ×Ô¶¨Òå¼¶±ð ¡ú ¶ÔÃ»ÓÐ±ê¼ÇÎª°²È«µÄActiveX½øÐÐ³õÊ¼»¯ºÍ½Å±¾ÔËÐÐ ¡ú ÆôÓÃ");  
+        return false;  
+    }  
+  
+    var oWB = oXL.Workbooks.Add();  
+    var oSheet = oWB.ActiveSheet;  
+    var sel = document.body.createTextRange(); //·µ»ØcreateTextRangeµÄtextºÍhtmlText,´´½¨Ò»¸öTextRange¶ÔÏó,BODY,TEXT,TextArea,BUTTONµÈÔªËØ¶¼Ö§³Ö,ËÑË÷ºÍÑ¡ÔñÎÄ±¾
+    sel.moveToElementText(curTbl);  
+    sel.select();  //½«µ±Ç°Ñ¡ÔñÇøÖÃÎªµ±Ç°¶ÔÏó 
+    sel.execCommand("Copy");  //ÔÚµ±Ç°ÎÄµµ¡¢µ±Ç°Ñ¡ÖÐÇø»ò¸ø¶¨·¶Î§ÉÏÖ´ÐÐÃüÁî 
+    oSheet.Paste();  
+    oXL.Visible = true;  //ÒªÔÚÆô¶¯Ê±Òþ²ØÒ»¸ö¶ÔÏó,Visible ÊôÐÔÎª False¡£
+}  
+  
+//´Ë·½·¨Îªieµ¼³öÖ®ºó,²»±£Áôtable¸ñÊ½µÄ·½·¨  
+function getIEnotsink(tableid) {  
+    var curTbl = document.getElementById(tableid);  
+    if (curTbl == null || curTbl == "") {  
+        alert("Ã»ÓÐÊý¾Ý");  
+        return false;  
+    }  
+    var oXL;  
+    try {  
+        oXL = new ActiveXObject("Excel.Application"); //´´½¨AX¶ÔÏóexcel    
+    } catch (e) {  
+        alert("ÎÞ·¨Æô¶¯Excel!\n\nÈç¹ûÄúÈ·ÐÅÄúµÄµçÄÔÖÐÒÑ¾­°²×°ÁËExcel£¬" + "ÄÇÃ´Çëµ÷ÕûIEµÄ°²È«¼¶±ð¡£\n\n¾ßÌå²Ù×÷£º\n\n" + "¹¤¾ß ¡ú InternetÑ¡Ïî ¡ú °²È« ¡ú ×Ô¶¨Òå¼¶±ð ¡ú ¶ÔÃ»ÓÐ±ê¼ÇÎª°²È«µÄActiveX½øÐÐ³õÊ¼»¯ºÍ½Å±¾ÔËÐÐ ¡ú ÆôÓÃ");  
+        return false;  
+    }  
+  
+    var oWB = oXL.Workbooks.Add();  
+    var oSheet = oWB.ActiveSheet;  
+    var Lenr = curTbl.rows.length;  
+    for (i = 0; i < Lenr; i++) {  
+        var Lenc = curTbl.rows[i].cells.length;  
+        for (j = 0; j < Lenc; j++) {  
+            oSheet.Cells(i + 1, j + 1).value = curTbl.rows(i).cells(j).innerText.replace("&nbsp;","");  
+        }  
+    }  
+    oXL.UserControl=true;
+    oXL.Visible = true;  
+}  
+  
+function getImport(tableid) {  
+    if (getExplorer() == 'ie') {  
+        getIEnotsink(tableid);  
+    }  
+    else {  
+        tableToExcel(tableid);  
+    }  
+}  
+  
+function Cleanup() {  
+    window.clearInterval(idTmr);  //È¡ÏûÓÉsetInterval()·½·¨ÉèÖÃµÄ¶¨Ê±Æ÷¡£
+    CollectGarbage();  //CollectGarbage,ÊÇIEµÄÒ»¸öÌØÓÐÊôÐÔ,ÓÃÓÚÊÍ·ÅÄÚ´æµÄ£¬Ê¹ÓÃ·½·¨Ó¦¸ÃÊÇ,½«¸Ã±äÁ¿»òÒýÓÃ¶ÔÏó,ÉèÖÃÎªnull»òdelete
+}  
+var tableToExcel = (function () {  
+    var uri = 'data:application/vnd.ms-excel;base64,',  
+    //Ä£°å
+    template = '<html><head><meta charset="UTF-8"></head><body><table border="1">{table}</table></body></html>',  
+    
+    base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) },  /*°Ñ×Ö·û´®×÷Îª URI ×é¼þ½øÐÐ±àÂë¡£ window.btoa½«ascii×Ö·û´®»ò¶þ½øÖÆÊý¾Ý×ª»»³ÉÒ»¸öbase64±àÂë¹ýµÄ×Ö·û´®,unescape() ¶ÔÍ¨¹ý escape() ±àÂëµÄ×Ö·û´®½øÐÐ½âÂë¡£document.encodeURIComponent*/
+    format = function (s, c) {  
+               return s.replace(/{(\w+)}/g,  
+                    function (m, p) { return c[p]; })  
+           }  
+    return function (table, name) {  
+        if (!table.nodeType) table = document.getElementById(table)  //²»Ó°ÏìÔ­tableÔÚä¯ÀÀÆ÷ÖÐµÄÕ¹Ê¾¡£
+        var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }  
+        window.location.href = uri + base64(format(template, ctx))/*format°ÑtemplateÖÐ{table}ÖÐµÄÄÚÈÝÌåÌæ»»*/  
+    }  
+  
+})()  
+
+</script>
+
+    <script type="text/javascript">
+    function startTime()   
+    {   
+        var today=new Date();//¶¨ÒåÈÕÆÚ¶ÔÏó   
+        var yyyy = today.getFullYear();//Í¨¹ýÈÕÆÚ¶ÔÏóµÄgetFullYear()·½·¨·µ»ØÄê    
+        var MM = today.getMonth()+1;//Í¨¹ýÈÕÆÚ¶ÔÏóµÄgetMonth()·½·¨·µ»ØÄê    
+        var dd = today.getDate();//Í¨¹ýÈÕÆÚ¶ÔÏóµÄgetDate()·½·¨·µ»ØÄê     
+        var hh=today.getHours();//Í¨¹ýÈÕÆÚ¶ÔÏóµÄgetHours·½·¨·µ»ØÐ¡Ê±   
+        var mm=today.getMinutes();//Í¨¹ýÈÕÆÚ¶ÔÏóµÄgetMinutes·½·¨·µ»Ø·ÖÖÓ   
+        var ss=today.getSeconds();//Í¨¹ýÈÕÆÚ¶ÔÏóµÄgetSeconds·½·¨·µ»ØÃë   
+        // Èç¹û·ÖÖÓ»òÐ¡Ê±µÄÖµÐ¡ÓÚ10£¬ÔòÔÚÆäÖµÇ°¼Ó0£¬±ÈÈçÈç¹ûÊ±¼äÊÇÏÂÎç3µã20·Ö9ÃëµÄ»°£¬ÔòÏÔÊ¾15£º20£º09   
+        MM=checkTime(MM);
+        dd=checkTime(dd);
+        mm=checkTime(mm);   
+        ss=checkTime(ss);    
+        var day; //ÓÃÓÚ±£´æÐÇÆÚ£¨getDay()·½·¨µÃµ½ÐÇÆÚ±àºÅ£©
+        if(today.getDay()==0)   day   =   "ÐÇÆÚÈÕ " 
+        if(today.getDay()==1)   day   =   "ÐÇÆÚÒ» " 
+        if(today.getDay()==2)   day   =   "ÐÇÆÚ¶þ " 
+        if(today.getDay()==3)   day   =   "ÐÇÆÚÈý " 
+        if(today.getDay()==4)   day   =   "ÐÇÆÚËÄ " 
+        if(today.getDay()==5)   day   =   "ÐÇÆÚÎå " 
+        if(today.getDay()==6)   day   =   "ÐÇÆÚÁù " 
+        document.getElementById('nowDateTimeSpan').innerHTML=yyyy+"-"+MM +"-"+ dd +" " + hh+":"+mm+":"+ss+"   " + day;   
+        setTimeout('startTime()',1000);//Ã¿Ò»ÃëÖÐÖØÐÂ¼ÓÔØstartTime()·½·¨ 
+    }   
+     
+    function checkTime(i)   
+    {   
+        if (i<10){
+            i="0" + i;
+        }   
+          return i;
+    }//
+
+    </script>
+
+</head>
+<body onload="defaultData()">
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                    <i class="icon-reorder shaded"></i></a>node </a>
+                <div class="nav-collapse collapse navbar-inverse-collapse">
+                    <ul class="nav nav-icons">
+
+                        <li><a href="../main/main.html">WELCOME</i></a></li>
+                        <li><a href="../data/date&analysis.html">DATE&POLLUTANT</a></li>
+                        <li><a href="../node/node.html">NODE</a></li>
+                        <li><a href="../main/main.html">DOWNLOAD</a></li>
+                    </ul>
+
+                    <ul class="nav pull-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">Information <span class="caret"></span></a>
+                            <ul class="dropdown-menu animated fadeInDown">
+                                <li class="profile-img">
+                                    <img src="images/picjumbo.com_HNCK4153_resize.jpg" class="profile-img">
+                                </li>
+                                <li>
+                                    <div class="profile-info">
+                                        <h4 class="username">Emily Hart</h4>
+                                        <p>emily_hart@email.com</p>
+                                        <div class="btn-group margin-bottom-2x" role="group">
+                                            <button type="button" class="btn btn-default"><i class="fa fa-user"></i> Profile</button>
+                                            <button type="button" class="btn btn-default"><i class="fa fa-sign-out"></i> Logout</button>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                    </ul>
+
+
+                </div>
+                    <!-- /.nav-collapse -->
+            </div>
+        </div>
+            <!-- /navbar-inner -->
+    </div>
+        <!-- /navbar -->
+    <div class="wrapper">
+        <div class="container">
+            <div class="row">
+
+                <div class="span3" style="background-color: white;text-align:center">
+
+                    <img style="max-width: 120%;margin:0;padding:0;" src="images/left-bg.png"/>
+
+
+                    <ul class="nav nav-list">
+                        <li><div class="left-bg"></div></li>
+                        <li class="time">
+                          <h1 style="color: #918C8C; font-size: 80px;margin-top: 50px;" id="nowDateTimeSpan" class="animated fadeInLeft">03:05</h1>
+                          <p style="margin-top: 50px;" class="animated fadeInRight">Saturday, December 9th 2017</p>
+                        </li>
+
+                    </ul>
+
+                
+
+
+
+                    <div style="text-align:center;clear:both">
+
+                    <script src="/follow.js" type="text/javascript"></script>
+                    </div>
+                    <div class="background1">
+                    <div class="container1"> 
+                        <svg id="back">
+                            <radialGradient id="SVGID_1_" cx="0" cy="0" r="320.8304" gradientUnits="userSpaceOnUse">
+                                <stop  offset="0" style="stop-color:#FFDE17;stop-opacity:0.7"/>
+                                <stop  offset="1" style="stop-color:#FFF200;stop-opacity:0"/>
+                            </radialGradient>
+                            <path id="sunburst" style="fill:url(#SVGID_1_);" d="M0,319.7c-18.6,0-37.3-1.6-55.5-4.8L-7.8,41.4c5.1,0.9,10.6,0.9,15.7,0L56,314.8C37.6,318,18.8,319.7,0,319.7z
+                         M-160.8,276.6c-32.5-18.8-61.3-42.9-85.5-71.6L-34,26.2c3.4,4.1,7.4,7.4,12,10.1L-160.8,276.6z M161.3,276.4L22.1,36.2
+                        c4.5-2.6,8.6-6,12-10.1l212.6,178.5C222.5,233.4,193.8,257.6,161.3,276.4z M-302.5,108.3C-315.4,73-321.9,36-322-1.8l277.6-0.5
+                        c0,5.3,0.9,10.4,2.7,15.2L-302.5,108.3z M302.6,107.8L41.8,12.8c1.7-4.7,2.6-9.7,2.6-14.9c0-0.3,0-0.6,0-1H322l0-1.3l0,1.9
+                        C322,35.4,315.5,72.5,302.6,107.8z M-41.8-17.5l-261-94.5c12.8-35.4,31.6-68,55.8-96.9L-34.1-30.8C-37.5-26.8-40.1-22.3-41.8-17.5z
+                         M41.7-17.7c-1.8-4.8-4.4-9.3-7.8-13.3l212-179.2c24.3,28.8,43.3,61.3,56.3,96.6L41.7-17.7z M-22.2-40.8l-139.6-240
+                        c32.7-19,68.1-32,105.2-38.6L-8-46.1C-13-45.2-17.8-43.4-22.2-40.8z M22-40.9c-4.4-2.6-9.2-4.3-14.2-5.1l47.1-273.6
+                        c37.2,6.4,72.7,19.2,105.4,38L22-40.9z"/>
+                        </svg>
+                        <nav>
+                            <ul>
+                                <li><a id="button-snow" class="active"><i class="wi wi-snow"></i></a></li>
+                                <li><a id="button-wind"><i class="wi wi-strong-wind"></i></a></li>
+                                <li><a id="button-rain"><i class="wi wi-rain"></i></a></li>
+                                <li><a id="button-thunder"><i class="wi wi-lightning"></i></a></li>
+                                <li><a id="button-sun"><i class="wi wi-day-sunny"></i></a></li>
+                            </ul>
+                        </nav>
+                        <div id="card" class="weather">
+                            <svg id="inner">
+                                <defs>
+                                    <path id="leaf" d="M41.9,56.3l0.1-2.5c0,0,4.6-1.2,5.6-2.2c1-1,3.6-13,12-15.6c9.7-3.1,19.9-2,26.1-2.1c2.7,0-10,23.9-20.5,25 c-7.5,0.8-17.2-5.1-17.2-5.1L41.9,56.3z"/>
+                                </defs>
+                                <circle id="sun" style="fill: #F7ED47" cx="0" cy="0" r="50"/>
+                                <g id="layer3"></g>
+                                <g id="cloud3" class="cloud"></g>
+                                <g id="layer2"></g>
+                                <g id="cloud2" class="cloud"></g>
+                                <g id="layer1"></g>
+                                <g id="cloud1" class="cloud"></g>
+                            </svg>
+                            <div class="details">
+                                <div class="temp">20<span>c</span></div>
+                                <div class="right">
+                                    <div id="date">Monday 22 August</div>
+                                    <div id="summary"></div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <svg id="outer"></svg>
+                    </div>
+                    </div>
+                    <script src='js/js/jquery-2.2.4.min.js'></script>
+                    <script src='js/js/TweenMax.min.js'></script>
+                    <script src='js/js/snap.svg-min.js'></script>
+                    <script src='js/js/zbvakw.js'></script>
+                    <script src="js/js/index.js"></script>
+
+
+
+
+
+
+                        <!--/.sidebar-->
+                </div>
+                    <!--/.span3-->
+                <div class="span9">
+                    <div class="content">
+                            
+                        <div class="module">
+                            <div class="module-head">
+                                <h3>DataTables
+
+                                </h3>
+                            </div>
+                            <div class="module-body table" style="height: 500px;text-align: center;">
+                                <img src="images/pi.jpg">
+                            <form name="myform" method="post" >
+                                    <div style="border-color: gray;width: " id="area0" class="span4">
+                                        <img src="images/node.jpg" onclick="showData1(0,1)">
+                                        <img src="images/node.jpg" onclick="showData1(0,2)">
+                                        <img src="images/node.jpg" onclick="showData1(0,3)">
+                                        <p>area0</p>
+                                    </div>
+                                    <div style="border-color: gray;width: " id="area1" class="span4">
+                                        <img src="images/node.jpg" onclick="showData1(1,1)">
+                                        <img src="images/node.jpg" onclick="showData1(1,2)">
+                                        <img src="images/node.jpg" onclick="showData1(1,3)">
+                                        <p>area1</p>
+                                    </div>
+                            </form>
+                            </div>
+                        </div>
+                            <!--/.module-->
+
+
+                        <div class="content">
+                            
+                        <div class="module">
+                            <div class="module-head">
+                                <h3>DataTables
+
+                                </h3>
+                            </div>
+                            <div class="module-body table">
+                            <form name="myform" method="post" >
+                                <div id="my_select" class="dataTables_wrapper" role="grid">
+                                <div id="my_select" class="dataTables_length">
+                                    begin:
+                                        <select id="time_start" name="time_start" onchange="showData1('all','all')">
+                                        <option value="2017-01" selected="selected">2017-01</option>
+                                        <option value="2017-02">2017-02</option>
+                                        <option value="2017-03">2017-03</option>
+                                        <option value="2017-04">2017-04</option>
+                                        <option value="2017-05">2017-05</option>
+                                        <option value="2017-06">2017-06</option>
+                                        <option value="2017-07">2017-07</option>
+                                        <option value="2017-08">2017-08</option>
+                                        <option value="2017-09">2017-09</option>
+                                        <option value="2017-10">2017-10</option>
+                                        <option value="2017-11">2017-11</option>
+                                        <option value="2017-12">2017-12</option>
+                                        </select>
+                                    end:
+                                        <select id="time_end" name="time_end" onchange="showData1('all','all')" >
+                                        <option value="2017-01">2017-01</option>
+                                        <option value="2017-02">2017-02</option>
+                                        <option value="2017-03">2017-03</option>
+                                        <option value="2017-04">2017-04</option>
+                                        <option value="2017-05">2017-05</option>
+                                        <option value="2017-06">2017-06</option>
+                                        <option value="2017-07">2017-07</option>
+                                        <option value="2017-08">2017-08</option>
+                                        <option value="2017-09">2017-09</option>
+                                        <option value="2017-10">2017-10</option>
+                                        <option value="2017-11">2017-11</option>
+                                        <option value="2017-12"selected="selected">2017-12</option>
+                                        </select>                               
+                                    type:
+                                        <select id="type" name="type" onchange="showData1('all','all')">
+                                        <option value="all" selected="selected">all</option>
+                                        <option value="data1">data1</option>
+                                        <option value="data2">data2</option>
+                                        <option value="data3">data3</option>
+                                        <option value="data4">data4</option>
+                                        <option value="data5">data5</option>
+                                        <option value="data6">data6</option>
+                                        <option value="data7">data7</option>
+                                        <option value="data8">data8</option>
+                                        <option value="temperature">temperature</option>
+                                        </select>
+                                    <!--area:
+                                        <select style="width:120px;" id="area" name="area" onchange="showData1()">
+                                        <option value="all" selected="selected">all</option>
+                                        <option value="a">a</option>
+                                        <option value="b">b</option>
+                                        <option value="c">c</option>
+                                        <option value="d">d</option>
+                                        <option value="e">e</option>
+                                        </select>
+                                    node:
+                                        <select style="width:120px;" id="node" name="node" onchange="showData1()">
+                                        <option value="all" selected="selected">all</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        </select>!-->
+                                    <table cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped  display dataTable" width="100%" id="tableHint" aria-describedby="DataTables_Table_0_info" style="width: 100%;" >
+      
+                                    </table>
+                                    <input type="button" value="Download" onclick="getImport('tableHint')">
+
+                                </div>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+
+
+
+
+                        <!--»­Í¼******************************************************************************************************************-->
+                        <div class="module">
+                            <div class="module-head">
+                                <h3>
+                                    Line Chart</h3>
+                            </div>
+                            <div class="module-body">
+                                <div class="chart inline-legend grid">
+                                    <div id="placeholder2" class="graph" style="height: 500px">
+                                        <div id="draw1"><canvas id="myChart"></canvas></div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/.module-->
+                            
+                            
+
+
+
+                        <div class="module">
+                            <div class="module-head">
+                                <h3>
+                                    histogram</h3>
+                            </div>
+                            <div class="module-body">
+                                <div class="chart inline-legend grid">
+                                    <div id="placeholder2" class="graph" style="height: 500px">
+
+                                        <div id="draw2"><canvas id="myChart1"></canvas></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/.module-->
+                        <!--»­Í¼******************************************************************************************************************-->
+                    </div>
+                        <!--/.content-->
+                </div>
+                    <!--/.span9-->
+                </div>
+            </div>
+            <!--/.container-->
+        </div>
+        <!--/.wrapper-->
+        <div class="footer">
+            <div class="container">
+                <b class="copyright">&copy; 2017 Edmin - Edmin </b>
+                All rights reserved.
+            </div>
+        </div>
+        <!--<script src="scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+        <script src="scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+        <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="scripts/flot/jquery.flot.js" type="text/javascript"></script>
+        <script src="scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
+        <script src="scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
+        <script src="scripts/common.js" type="text/javascript"></script>-->
+      
+    </body>
+
+ </html>
+
